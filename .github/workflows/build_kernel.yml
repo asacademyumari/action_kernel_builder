@@ -30,7 +30,7 @@ on:
       TOOLCHAIN_URL:
         description: "Clone URL of your toolchain including branch"
         required: true
-        default: 'https://gitlab.com/dogpoopy/clang-r522817.git -b main'
+        default: 'https://gitlab.com/kei-space/clang/r522817.git'
       ANYKERNEL:
         description: "Clone URL of your AnyKernel including branch"
         required: true
@@ -56,8 +56,8 @@ jobs:
 
       - name: Cloning Kernel Source
         run: |
-          git clone ${{ github.event.inputs.KERNEL_MODULE }} -b ${{ github.event.inputs.KERNEL_MODULE_BRANCH }} ${{ github.workspace }}/kernel_workspace
-          cd ${{ github.workspace }}/kernel_workspace
+          git clone ${{ github.event.inputs.KERNEL_MODULE }} -b ${{ github.event.inputs.KERNEL_MODULE_BRANCH }} ${{ github.workspace }}
+          cd ${{ github.workspace }}
           git clone --single-branch --depth=1 --no-tags ${{ github.event.inputs.KERNEL_SOURCE }} -b ${{ github.event.inputs.KERNEL_BRANCH }} kernel_platform/msm-kernel
 
       - name: Cloning Toolchain
@@ -68,12 +68,12 @@ jobs:
         id: cache-out
         uses: actions/cache@v4
         with:
-          path: ${{ github.workspace }}/kernel_workspace/kernel_platform/msm/out
+          path: ${{ github.workspace }}/kernel_platform/msm/out
           key: ${{ github.event.inputs.KERNEL_SOURCE }}-out-
 
       - name: Start Compilation
         run: |
-          objdir="${{ github.workspace }}/kernel_workspace/kernel_platform/msm/out"
+          objdir="${{ github.workspace }}/kernel_platform/msm/out"
           anykernel="${{ github.workspace }}/anykernel"
           clang_dir="${{ github.workspace }}/toolchain"
           kernel_name="${{ github.event.inputs.KERNEL_NAME }}"
@@ -82,7 +82,7 @@ jobs:
           export PATH="${clang_dir}/bin:$PATH"
 
           make_defconfig() {
-            cd "${{ github.workspace }}/kernel_workspace/kernel_platform/msm-kernel"
+            cd "${{ github.workspace }}/kernel_platform/msm-kernel"
             start=$(date +"%s")
             make -s ARCH=${arch} O=${objdir} ${{ github.event.inputs.CONFIG_FILE }} -j$(nproc --all)
           }

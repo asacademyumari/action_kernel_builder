@@ -82,6 +82,8 @@ jobs:
           export PATH="${clang_dir}/bin:$PATH"
           cd ${{ github.workspace }}/kernel_platform/msm-kernel
           ls
+          export ARCH=arm64
+          export SUBARCH=arm64
           make O=out clean
           make O=out mrproper
           make O=out vendor/holi-qgki_defconfig

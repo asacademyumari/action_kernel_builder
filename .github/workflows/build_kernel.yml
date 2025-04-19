@@ -80,12 +80,11 @@ jobs:
           zip_name="${kernel_name}-$(date +"%d-%m-%Y-%H%M").zip"
           arch="arm64"
           export PATH="${clang_dir}/bin:$PATH"
-
-          make_defconfig() {
-            cd "${{ github.workspace }}/kernel_platform/msm-kernel"
-            start=$(date +"%s")
-            make -s ARCH=${arch} O=${objdir} vendor/holi-qgki_defconfig -j$(nproc --all)
-          }
+          cd ${{ github.workspace }}/kernel_platform/msm-kernel
+          ls
+          start=$(date +"%s")
+          make -s ARCH=${arch} O=${objdir} vendor/holi-qgki_defconfig -j$(nproc --all)
+          sleep 160
 
           compile() {
             make -j$(nproc --all) \

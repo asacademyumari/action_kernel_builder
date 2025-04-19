@@ -82,9 +82,9 @@ jobs:
           export PATH="${clang_dir}/bin:$PATH"
           cd ${{ github.workspace }}/kernel_platform/msm-kernel
           ls
-          start=$(date +"%s")
-          make -s ARCH=${arch} O=${objdir} vendor/holi-qgki_defconfig -j$(nproc --all)
-          sleep 160
+          make O=out clean
+          make O=out mrproper
+          make O=out vendor/holi-qgki_defconfig
 
           compile() {
             make -j$(nproc --all) \
